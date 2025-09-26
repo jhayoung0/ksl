@@ -34,17 +34,15 @@ void AMainCharacter::SetupPlayerInputComponent(
 
 
 // // Q01의 seq 0 재생  Player->PlaySignMontageByKey("Q01", "0", 1);
-bool AMainCharacter::PlaySignMontageByKey(FName SignNum, FName SeqId, int32 Seqcount,
-	float PlayRate, float StartTime)
+bool AMainCharacter::PlaySignMontageByKey(FString label, int32 Seqcount, float PlayRate, float StartTime)
 {
-	
 	if (!MotionTable)
 	{
 		return false;
 	}
-
-	const FName RowName = MakeRowKey(SignNum, SeqId);
-	const FMotionRow* Row = MotionTable->FindRow<FMotionRow>(RowName, TEXT("PlaySignMontageByKey"));
+	
+	
+	const FMotionRow* Row = MotionTable->FindRow<FMotionRow>(FName(label), TEXT("PlaySignMontageByKey"));
 	if (!Row)
 	{
 		return false;

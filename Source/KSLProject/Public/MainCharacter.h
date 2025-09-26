@@ -31,16 +31,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sign")
 	UDataTable* MotionTable = nullptr;
 
-	// sign_num + seq_Id로 RowName을 만들어 FindRow로 바로 재생
+	// label 재생
 	UFUNCTION(BlueprintCallable, Category="Sign")
-	bool PlaySignMontageByKey(FName SignNum, FName SeqId, int32 Seqcount, float PlayRate = 1.f, float StartTime = 0.f);
-
-private:
-	static FName MakeRowKey(FName SignNum, FName SeqId)
-	{
-		return FName(*(SignNum.ToString() + TEXT("_") + SeqId.ToString()));
-	}
-	
+	bool PlaySignMontageByKey(FString label, int32 Seqcount, float PlayRate = 1.f, float StartTime = 0.f);
 
 
 	

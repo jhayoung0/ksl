@@ -15,7 +15,7 @@ class KSLPROJECT_API UProblemUI : public UUserWidget
 	GENERATED_BODY()
 
 public: // display word
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget))  // bind하려고
 	class UTextBlock* txt_signword;
 		
 };

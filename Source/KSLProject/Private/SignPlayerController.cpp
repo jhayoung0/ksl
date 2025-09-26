@@ -1,8 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SignPlayerController.h"
-
 #include "Blueprint/UserWidget.h"
+
+
+void ASignPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	MainChar = Cast<AMainCharacter>(GetPawn());
+	ShowWidgetForState(GamePlayState::MainMenu);
+}
+
+
+
 
 void ASignPlayerController::SetGameState(GamePlayState NewState)
 {
@@ -36,28 +47,52 @@ void ASignPlayerController::SetGameState(GamePlayState NewState)
 
 void ASignPlayerController::BeginLesson()
 {
+	// 토픽에 따라 첫번째 문제 선택
+	if (topicId == 0) // 숫자
+	{
+		startquestionid = TEXT("0");
+	}
+	else if (topicId ==1) // 의사소통
+	{
+		startquestionid = TEXT("11");
+	}
+	else // 랜덤 문제 시작
+	{
+		startquestionid = FString::FromInt(FMath::RandRange(0, 24));
+	};
+
+	SetGameState(GamePlayState::PlayingOneSequence);
 }
 
+
+// 첫번째 시퀀스 모션 노출
 void ASignPlayerController::PlayOneSeqMotion()
 {
-	AMainCharacter* ControlledPlayer = Cast<AMainCharacter>(GetPawn());
-	if (ControlledPlayer &&
-		ControlledPlayer->PlaySignMontageByKey(FName(TEXT("10")), FName(TEXT("00")), 1))
+	// 여기 수정해야 함.
+	label = startquestionid;
+	
+	if (MainChar &&
+		MainChar->PlaySignMontageByKey(startquestionid, 1))
 	{
 		SetGameState(GamePlayState::WaitingJudge);
 	}
+
+	ShowWidgetForState(GamePlayState::PlayingOneSequence);
 }
 
+// 두번째 시퀀스 모션 노출 (두번째 시퀀스 있는 경우만)
 void ASignPlayerController::PlayTwoSeqMotion()
 {
-	AMainCharacter* ControlledPlayer = Cast<AMainCharacter>(GetPawn());
-	if (ControlledPlayer &&
-		ControlledPlayer->PlaySignMontageByKey(FName(TEXT("10")), FName(TEXT("01")), 2))
+	const FString Label = TEXT("10_01");
+
+	if (MainChar &&
+		MainChar->PlaySignMontageByKey(Label, 2))
 	{
 		SetGameState(GamePlayState::WaitingJudge);
 	}
 }
 
+// 판정이 완료되면
 void ASignPlayerController::OnJudgeDone(bool bCorrect)
 {
 	if (!bCorrect)
@@ -69,6 +104,9 @@ void ASignPlayerController::OnJudgeDone(bool bCorrect)
 	SetGameState(GamePlayState::Feedback);
 }
 
+
+
+// 상태에 맞는 위젯 노출
 void ASignPlayerController::ShowWidgetForState(GamePlayState State)
 {
 	if (CurrentWidget)

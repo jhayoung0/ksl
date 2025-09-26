@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "MainUI.generated.h"
 
+class ASignPlayerController;
 /**
  * 
  */
@@ -15,7 +16,47 @@ class KSLPROJECT_API UMainUI : public UUserWidget
 	GENERATED_BODY()
 	
 	
-public: // 버튼
+public:
+
+	UPROPERTY()
+	ASignPlayerController* pc;
+
+	// 버튼
+	// 시작 버튼
+	UPROPERTY(meta = (BindWidget)) 
+	class UTextBlock* txt_start;
 	
+	UPROPERTY(meta = (BindWidget)) 
+	class UButton* btn_start;
 	
+	// 숫자
+	UPROPERTY(meta = (BindWidget)) 
+	class UButton* btn_word1;
+
+	// 의사소통표현
+	UPROPERTY(meta = (BindWidget))
+	class UButton* btn_word2;
+
+	// 랜덤
+	UPROPERTY(meta = (BindWidget))
+	class UButton* btn_word3;
+	
+	virtual void NativeConstruct() override;
+	virtual void NativeOnInitialized() override;
+
+	// 버튼 클릭 함수
+	UFUNCTION()
+	void btn_click_start();
+	UFUNCTION()
+	void btn_click_word1();
+	UFUNCTION()
+	void btn_click_word2();
+	UFUNCTION()
+	void btn_click_word3();
+
+
+	UFUNCTION()
+	void btn_hovered();
+	UFUNCTION()
+	void btn_unhovered();
 };
