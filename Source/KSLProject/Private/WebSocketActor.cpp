@@ -223,6 +223,11 @@ void AWebSocketActor::OnMessageReceived(const FString& Message)
 		UE_LOG(LogTemp, Log, TEXT("JSON response - success: %s, sign_id: %s"), 
 			(bIsSuccess ? TEXT("true") : TEXT("false")), 
 			*SignId);
+
+		if (bIsSuccess)
+		{
+			OnSuccessResponse.Broadcast(LastServerResponse);
+		}
 	}
 	else
 	{

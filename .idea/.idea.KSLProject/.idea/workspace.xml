@@ -5,6 +5,7 @@
     <projectFile profileName="EpicGames.AspNet">../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.AspNet/EpicGames.AspNet.csproj</projectFile>
     <projectFile kind="Docker">../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj</projectFile>
+    <projectFile kind="Docker">../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/KSLProject.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
@@ -12,27 +13,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f48fe557-713c-48a2-bc2e-50b5346c2b0c" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Private/CharacterAnimInstance.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Private/MainGameMode.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Private/MotionRow.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Private/ProblemUI.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Private/SignPlayerController.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Public/CharacterAnimInstance.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Public/MainGameMode.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Public/MotionRow.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Public/ProblemUI.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Public/SignPlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.KSLProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KSLProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Game/Blueprints/BP_MainCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/Blueprints/BP_MainCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Game/UI/WBP_MainUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/UI/WBP_MainUI.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/A/CK/1CQL17OKCU2SV6B1FIV4EO.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/C/MR/KIKLMX30VLWVBYW800G3B6.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/C/MR/KIKLMX30VLWVBYW800G3B6.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/MainCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/MainCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/MainCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/MainCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/MainUI.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/MainUI.h" afterDir="false" />
-    </list>
+    <list default="true" id="f48fe557-713c-48a2-bc2e-50b5346c2b0c" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,6 +24,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Online/WebSockets/Public/WebSocketsModule.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -60,7 +44,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "khc",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -167,6 +151,17 @@
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
     </configuration>
+    <configuration name="EpicGames.Perforce.Fixture/Dockerfile (1)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="epicgames.perforce.fixture" />
+          <option name="contextFolderPath" value="C:\Project\Team\ksl" />
+          <option name="sourceFilePath" value="../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
     <configuration name="EpicGames.Perforce.Fixture/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -189,6 +184,7 @@
       <workItem from="1758799245597" duration="129000" />
       <workItem from="1758799411115" duration="2067000" />
       <workItem from="1758844931023" duration="7913000" />
+      <workItem from="1758854647301" duration="4373000" />
     </task>
     <servers />
   </component>

@@ -23,6 +23,8 @@ struct FServerResponseData
 	FString SignId;
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnServerResponseReceived, const FServerResponseData&, ResponseData);
+
 class UMediaPlayer;
 
 UCLASS()
@@ -37,11 +39,14 @@ public:
 	FServerResponseData LastServerResponse;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WebSocket")
-	bool bShouldSendFrames = false;
+	bool bShouldSendFrames = true;
 
 	// 블루프린트에서 호출할 수 있는 함수를 선언합니다.
 	UFUNCTION(BlueprintCallable, Category = "WebSocket")
 	void SetFrameSending(bool bShouldSend);
+
+	UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+	FOnServerResponseReceived OnSuccessResponse;
 
 protected:
 	virtual void BeginPlay() override;
