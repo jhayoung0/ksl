@@ -2,6 +2,7 @@
 
 
 #include "Public/MainCharacter.h"
+#include "MotionRow.h"
 
 
 // Sets default values
@@ -30,4 +31,40 @@ void AMainCharacter::SetupPlayerInputComponent(
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
+
+
+// // Q01의 seq 0 재생  Player->PlaySignMontageByKey("Q01", "0", 1);
+bool AMainCharacter::PlaySignMontageByKey(FName SignNum, FName SeqId, int32 Seqcount,
+	float PlayRate, float StartTime)
+{
+	
+	if (!MotionTable)
+	{
+		return false;
+	}
+
+	const FName RowName = MakeRowKey(SignNum, SeqId);
+	const FMotionRow* Row = MotionTable->FindRow<FMotionRow>(RowName, TEXT("PlaySignMontageByKey"));
+	if (!Row)
+	{
+		return false;
+	}
+	if (!Row->signMontage)
+	{
+		return false;
+	}
+
+	if (USkeletalMeshComponent* MeshComp = GetMesh())
+	{
+		if (UAnimInstance* AnimInst = MeshComp->GetAnimInstance())
+		{
+			const float Len = AnimInst->Montage_Play(Row->signMontage, PlayRate,
+				EMontagePlayReturnType::MontageLength, StartTime, true);
+			return (Len > 0.f);
+		}
+	}
+	return false;
+	
+}
+
 

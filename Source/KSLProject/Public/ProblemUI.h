@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MainUI.generated.h"
+#include "ProblemUI.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class KSLPROJECT_API UMainUI : public UUserWidget
+class KSLPROJECT_API UProblemUI : public UUserWidget
 {
 	GENERATED_BODY()
-	
-	
-public: // 버튼
-	
-	
+
+public: // display word
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* txt_signword;
+		
 };

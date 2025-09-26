@@ -3,19 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "MainUI.generated.h"
+#include "GameFramework/GameModeBase.h"
+#include "MainGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class KSLPROJECT_API UMainUI : public UUserWidget
+class KSLPROJECT_API AMainGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
-	
-public: // 버튼
-	
-	
 };

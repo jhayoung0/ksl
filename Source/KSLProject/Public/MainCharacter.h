@@ -26,4 +26,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(
 		class UInputComponent* PlayerInputComponent) override;
+	
+	// 모션 담겨있는 데이터 테이블
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sign")
+	UDataTable* MotionTable = nullptr;
+
+	// sign_num + seq_Id로 RowName을 만들어 FindRow로 바로 재생
+	UFUNCTION(BlueprintCallable, Category="Sign")
+	bool PlaySignMontageByKey(FName SignNum, FName SeqId, int32 Seqcount, float PlayRate = 1.f, float StartTime = 0.f);
+
+private:
+	static FName MakeRowKey(FName SignNum, FName SeqId)
+	{
+		return FName(*(SignNum.ToString() + TEXT("_") + SeqId.ToString()));
+	}
+	
+
+
+	
 };

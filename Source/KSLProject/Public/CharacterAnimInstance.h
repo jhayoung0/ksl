@@ -3,19 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "MainUI.generated.h"
+#include "Animation/AnimInstance.h"
+#include "CharacterAnimInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class KSLPROJECT_API UMainUI : public UUserWidget
+class KSLPROJECT_API UCharacterAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
-	
-public: // 버튼
+
+
+public:// ABP
+
 	
 	
 };
