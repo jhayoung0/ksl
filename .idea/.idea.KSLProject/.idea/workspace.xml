@@ -13,7 +13,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f48fe557-713c-48a2-bc2e-50b5346c2b0c" name="변경" comment="" />
+    <list default="true" id="f48fe557-713c-48a2-bc2e-50b5346c2b0c" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.KSLProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KSLProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Game/Blueprints/BP_MainCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/Blueprints/BP_MainCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Game/Blueprints/BP_SignController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/Blueprints/BP_SignController.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Game/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/Maps/TestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/9/DL/UJ2QF2WXGQ84H5CEVXK9B7.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/9/DL/UJ2QF2WXGQ84H5CEVXK9B7.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/C/MR/KIKLMX30VLWVBYW800G3B6.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/SignPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/SignPlayerController.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,7 +53,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "khc",
+    "git-widget-placeholder": "hy",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -185,6 +194,7 @@
       <workItem from="1758799411115" duration="2067000" />
       <workItem from="1758844931023" duration="7913000" />
       <workItem from="1758854647301" duration="4373000" />
+      <workItem from="1758874684745" duration="1829000" />
     </task>
     <servers />
   </component>

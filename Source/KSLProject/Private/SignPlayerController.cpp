@@ -20,7 +20,7 @@ void ASignPlayerController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	FString EnumName = UEnum::GetValueAsString(CurrentState);
-	//UE_LOG(LogTemp, Warning, TEXT("CurrentState: %s"), *EnumName);
+	UE_LOG(LogTemp, Warning, TEXT("CurrentState: %s"), *EnumName);
 	
 }
 
@@ -99,7 +99,8 @@ void ASignPlayerController::PlayOneSeqMotion()
 	// 3) 몽타주 재생 → 상태 전이
 	if (MainChar)
 	{
-		MainChar->PlaySignMontageByKey(startquestionid, 1); 
+		MainChar->PlaySignMontageByKey(startquestionid, 1);
+		UE_LOG(LogTemp, Warning, TEXT("montage"));
 		//SetGameState(GamePlayState::WaitingJudge);
 	}
 
@@ -122,13 +123,11 @@ void ASignPlayerController::PlayTwoSeqMotion()
 // 판정이 완료되면
 void ASignPlayerController::OnJudgeDone(bool bCorrect)
 {
-	
 	if (!bCorrect)
 	{
 		SetGameState(GamePlayState::WaitingJudge);
 		return;
 	}
-
 	SetGameState(GamePlayState::Feedback);
 }
 
