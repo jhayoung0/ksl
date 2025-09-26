@@ -24,6 +24,20 @@ AWebSocketActor::AWebSocketActor()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void AWebSocketActor::SetFrameSending(bool bShouldSend)
+{
+	bShouldSendFrames = bShouldSend;
+
+	if (bShouldSendFrames)
+	{
+		StartSendingFrames();
+	}
+	else
+	{
+		StopSendingFrames();
+	}
+}
+
 void AWebSocketActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -162,9 +176,14 @@ void AWebSocketActor::OnConnected()
 {
 	UE_LOG(LogTemp, Log, TEXT("Connected to server."));
 
+	if (bShouldSendFrames)
+	{
+		StartSendingFrames();
+	}
+	
 	//SendTestData(); 
 
-	SendFrameData();
+	//SendFrameData();
 	//if (UWorld* World = GetWorld())
 	//{
 	//	World->GetTimerManager().SetTimer(FrameSendTimerHandle, this, &AWebSocketActor::SendFrameData, 500.f, true);
@@ -197,6 +216,9 @@ void AWebSocketActor::OnMessageReceived(const FString& Message)
 		FString SignId;
 		JsonObject->TryGetStringField(TEXT("sign_id"), SignId);
 
+		LastServerResponse.bIsSuccess = bIsSuccess;
+		LastServerResponse.SignId = SignId;
+
 		// 로그 출력 형식을 bool(%s)과 FString(%s)에 맞게 수정합니다.
 		UE_LOG(LogTemp, Log, TEXT("JSON response - success: %s, sign_id: %s"), 
 			(bIsSuccess ? TEXT("true") : TEXT("false")), 
@@ -211,6 +233,21 @@ void AWebSocketActor::OnMessageReceived(const FString& Message)
 void AWebSocketActor::OnClosed(int32 StatusCode, const FString& Reason, bool bWasClean)
 {
 	UE_LOG(LogTemp, Warning, TEXT("WebSocket closed - code: %d, reason: %s, clean: %s"), StatusCode, *Reason, bWasClean ? TEXT("true") : TEXT("false"));
+}
+
+void AWebSocketActor::StartSendingFrames()
+{
+	if (WebSocket.IsValid() && WebSocket->IsConnected() && !GetWorld()->GetTimerManager().IsTimerActive(FrameSendTimerHandle))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Starting frame data sending timer..."));
+		GetWorld()->GetTimerManager().SetTimer(FrameSendTimerHandle, this, &AWebSocketActor::SendFrameData, 1.f / 6.f, true);
+	}
+}
+
+void AWebSocketActor::StopSendingFrames()
+{
+	UE_LOG(LogTemp, Log, TEXT("Stopping frame data sending timer..."));
+	GetWorld()->GetTimerManager().ClearTimer(FrameSendTimerHandle);
 }
 
 void AWebSocketActor::SendFrameData()

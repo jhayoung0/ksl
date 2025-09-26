@@ -10,6 +10,19 @@
 #include "Slate/WidgetRenderer.h"
 #include "WebSocketActor.generated.h"
 
+USTRUCT(BlueprintType)
+struct FServerResponseData
+{
+	GENERATED_BODY()
+
+	// 블루프린트에서 읽기 전용으로 노출시킵니다.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WebSocket Response")
+	bool bIsSuccess = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WebSocket Response")
+	FString SignId;
+};
+
 class UMediaPlayer;
 
 UCLASS()
@@ -19,6 +32,16 @@ class KSLPROJECT_API AWebSocketActor : public AActor
 
 public:
 	AWebSocketActor();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WebSocket")
+	FServerResponseData LastServerResponse;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WebSocket")
+	bool bShouldSendFrames = false;
+
+	// 블루프린트에서 호출할 수 있는 함수를 선언합니다.
+	UFUNCTION(BlueprintCallable, Category = "WebSocket")
+	void SetFrameSending(bool bShouldSend);
 
 protected:
 	virtual void BeginPlay() override;
@@ -60,6 +83,9 @@ private:
 	void OnConnectionError(const FString& Error);
 	void OnMessageReceived(const FString& Message);
 	void OnClosed(int32 StatusCode, const FString& Reason, bool bWasClean);
+
+	void StartSendingFrames();
+	void StopSendingFrames();
 
 	TSharedPtr<IWebSocket> WebSocket;
 
