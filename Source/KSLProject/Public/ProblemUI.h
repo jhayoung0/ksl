@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "ProblemUI.generated.h"
 
 /**
@@ -17,5 +18,16 @@ class KSLPROJECT_API UProblemUI : public UUserWidget
 public: // display word
 	UPROPERTY(meta = (BindWidget))  // bind하려고
 	class UTextBlock* txt_signword;
-		
+
+
+	// 단어 갱신용 
+	UFUNCTION(BlueprintCallable)
+	void SetSignWord(const FText& InText)
+	{
+		if (txt_signword)
+		{
+			txt_signword->SetText(InText);
+		}
+	}
+	
 };

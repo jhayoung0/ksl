@@ -14,46 +14,18 @@ void UMainUI::NativeConstruct()
 	// 버튼 클릭시 topic 담아두기
 	if (ensure(btn_word1))                                                                                                                                           
 	{                                                                                                                                                               
-		btn_start->OnHovered.AddDynamic(this, &UMainUI::btn_hovered);
-		btn_start->OnUnhovered.AddDynamic(this, &UMainUI::btn_unhovered);
-		btn_start->OnClicked.AddDynamic(this, &UMainUI::btn_click_start);
 		btn_word1->OnClicked.AddDynamic(this, &UMainUI::btn_click_word1);
 		btn_word2->OnClicked.AddDynamic(this, &UMainUI::btn_click_word2);
 		btn_word3->OnClicked.AddDynamic(this, &UMainUI::btn_click_word3);     
 	}  
-	
 }
+
 
 void UMainUI::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
 	pc = Cast<ASignPlayerController>(GetWorld()->GetFirstPlayerController());
-}
-
-void UMainUI::btn_click_start()
-{
-}
-
-
-void UMainUI::btn_hovered()
-{
-
-	// 호버 될 경우 버튼 색 변경
-	
-	/*
-	 * if (txt_start)
-	{
-		txt_start->SetText(FText("시작하기"));
-	}
-
-	*/
-}
-
-void UMainUI::btn_unhovered()
-{
-	// 언호버 될 경우 다시 원래로 돌리기
-	
 }
 
 

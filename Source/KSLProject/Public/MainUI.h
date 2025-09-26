@@ -46,17 +46,11 @@ public:
 
 	// 버튼 클릭 함수
 	UFUNCTION()
-	void btn_click_start();
-	UFUNCTION()
 	void btn_click_word1();
 	UFUNCTION()
 	void btn_click_word2();
 	UFUNCTION()
 	void btn_click_word3();
 
-
-	UFUNCTION()
-	void btn_hovered();
-	UFUNCTION()
-	void btn_unhovered();
+	
 };

@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SignPlayerController.h"
+
+#include "MotionRow.h"
+#include "ProblemUI.h"
 #include "Blueprint/UserWidget.h"
 
 
@@ -9,27 +12,36 @@ void ASignPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	MainChar = Cast<AMainCharacter>(GetPawn());
-	ShowWidgetForState(GamePlayState::MainMenu);
+	SetGameState(GamePlayState::MainMenu);
 }
 
+void ASignPlayerController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 
+	FString EnumName = UEnum::GetValueAsString(CurrentState);
+	//UE_LOG(LogTemp, Warning, TEXT("CurrentState: %s"), *EnumName);
+	
+}
 
 
 void ASignPlayerController::SetGameState(GamePlayState NewState)
 {
-	CurrentState = NewState;
+	PreviousState = CurrentState;
+	CurrentState  = NewState;
 
-	switch (NewState)
+	switch (CurrentState)
 	{
 	case GamePlayState::MainMenu:
 		break;
 	case GamePlayState::TopicSelect:
 		break;
 	case GamePlayState::LessonIntro:
-		BeginLesson();
+		BeginLesson(); // 1회 호출
 		break;
 	case GamePlayState::PlayingOneSequence:
 		PlayOneSeqMotion();
+		ShowWidgetForState(GamePlayState::PlayingOneSequence);
 		break;
 	case GamePlayState::PlayingTwoSequence:
 		PlayTwoSeqMotion();
@@ -43,6 +55,10 @@ void ASignPlayerController::SetGameState(GamePlayState NewState)
 	case GamePlayState::ResultMenu:
 		break;
 	}
+
+
+	ShowWidgetForState(CurrentState);
+	
 }
 
 void ASignPlayerController::BeginLesson()
@@ -52,7 +68,7 @@ void ASignPlayerController::BeginLesson()
 	{
 		startquestionid = TEXT("0");
 	}
-	else if (topicId ==1) // 의사소통
+	else if (topicId==1) // 의사소통
 	{
 		startquestionid = TEXT("11");
 	}
@@ -60,7 +76,6 @@ void ASignPlayerController::BeginLesson()
 	{
 		startquestionid = FString::FromInt(FMath::RandRange(0, 24));
 	};
-
 	SetGameState(GamePlayState::PlayingOneSequence);
 }
 
@@ -68,16 +83,28 @@ void ASignPlayerController::BeginLesson()
 // 첫번째 시퀀스 모션 노출
 void ASignPlayerController::PlayOneSeqMotion()
 {
-	// 여기 수정해야 함.
-	label = startquestionid;
-	
-	if (MainChar &&
-		MainChar->PlaySignMontageByKey(startquestionid, 1))
+	// 1) Row 조회
+	if (!MotionTable) return;
+	//const FName RowKey(*startquestionid); // *startquestionid
+	const FMotionRow* Row = MotionTable->FindRow<FMotionRow>(TEXT("0"), TEXT("PlayOneSeqMotion"));
+	if (Row)
 	{
-		SetGameState(GamePlayState::WaitingJudge);
+		// 2) UI 단어 갱신
+		if (PlayingUI)
+		{
+			PlayingUI->SetSignWord(FText::FromString(Row->sign_text));
+		}
 	}
 
-	ShowWidgetForState(GamePlayState::PlayingOneSequence);
+	// 3) 몽타주 재생 → 상태 전이
+	if (MainChar)
+	{
+		MainChar->PlaySignMontageByKey(startquestionid, 1); 
+		//SetGameState(GamePlayState::WaitingJudge);
+	}
+
+	// 4) judgeresult에서 값 꺼내와서 판정
+	// seq가 하나일 경우
 }
 
 // 두번째 시퀀스 모션 노출 (두번째 시퀀스 있는 경우만)
@@ -95,6 +122,7 @@ void ASignPlayerController::PlayTwoSeqMotion()
 // 판정이 완료되면
 void ASignPlayerController::OnJudgeDone(bool bCorrect)
 {
+	
 	if (!bCorrect)
 	{
 		SetGameState(GamePlayState::WaitingJudge);
@@ -114,6 +142,8 @@ void ASignPlayerController::ShowWidgetForState(GamePlayState State)
 		CurrentWidget->RemoveFromParent();
 		CurrentWidget = nullptr;
 	}
+
+	PlayingUI = nullptr;
 
 	TSubclassOf<UUserWidget> WidgetClass = nullptr;
 
@@ -144,6 +174,11 @@ void ASignPlayerController::ShowWidgetForState(GamePlayState State)
 		if (CurrentWidget)
 		{
 			CurrentWidget->AddToViewport(0);
+
+			if (State == GamePlayState::PlayingOneSequence)
+			{
+				PlayingUI = Cast<UProblemUI>(CurrentWidget);
+			}
 		}
 	}
 }

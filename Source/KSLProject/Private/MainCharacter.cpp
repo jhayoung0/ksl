@@ -33,7 +33,7 @@ void AMainCharacter::SetupPlayerInputComponent(
 }
 
 
-// // Q01의 seq 0 재생  Player->PlaySignMontageByKey("Q01", "0", 1);
+// 
 bool AMainCharacter::PlaySignMontageByKey(FString label, int32 Seqcount, float PlayRate, float StartTime)
 {
 	if (!MotionTable)

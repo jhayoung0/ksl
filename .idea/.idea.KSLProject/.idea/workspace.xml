@@ -13,22 +13,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f48fe557-713c-48a2-bc2e-50b5346c2b0c" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/Game/Blueprints/BP_SIgnGameMode.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Game/Blueprints/BP_SignController.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Private/JudgeResult.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KSLProject/Public/JudgeResult.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KSLProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KSLProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Game/UI/WBP_MainUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/UI/WBP_MainUI.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Game/Blueprints/BP_SignController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/Blueprints/BP_SignController.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Lvl_ThirdPerson.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ThirdPerson/Lvl_ThirdPerson.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/MainCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/MainCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/MainGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/MainGameMode.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/MainUI.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/MainUI.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/MotionRow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/MotionRow.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/SignPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/SignPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/MainCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/MainCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/MainGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/MainGameMode.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/MainUI.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/MainUI.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/MotionRow.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/MotionRow.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/ProblemUI.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/ProblemUI.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/SignPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/SignPlayerController.h" afterDir="false" />
     </list>
@@ -44,6 +35,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/KSLProject/UHT/JudgeResult.gen.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -56,23 +50,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C/C++ 프로젝트.KSLProject.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;hy&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C/C++ 프로젝트.KSLProject.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "hy",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C/C++ 프로젝트.KSLProject">
     <configuration name="KSLProject" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
@@ -195,6 +189,7 @@
       <workItem from="1758854612087" duration="2059000" />
       <workItem from="1758856712596" duration="8902000" />
       <workItem from="1758870033562" duration="195000" />
+      <workItem from="1758870353472" duration="4009000" />
     </task>
     <servers />
   </component>

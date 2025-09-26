@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "JudgeResult.h"
 #include "MainCharacter.h"
+#include "ProblemUI.h"
 #include "GameFramework/PlayerController.h"
 #include "SignPlayerController.generated.h"
 
@@ -37,11 +39,12 @@ class KSLPROJECT_API ASignPlayerController : public APlayerController
 public:
 
 	virtual void BeginPlay() override;
-	
+	virtual void Tick(float DeltaSeconds) override;
 	// 현재 상태 가져오기
 	UPROPERTY(EditAnywhere)
-	GamePlayState CurrentState = GamePlayState::MainMenu;
-
+	GamePlayState CurrentState;
+	GamePlayState PreviousState;
+	
 	// 전환함수
 	UFUNCTION(BlueprintCallable)
 	void SetGameState(GamePlayState NewState);
@@ -54,6 +57,10 @@ public:
 	UPROPERTY()
 	FString startquestionid;
 
+	// 현재 판정 결과
+	UPROPERTY(BlueprintReadOnly, Category="Judge")
+	FJudgeResult JudgeResult;
+	
 	
 	// 현재 진행되는 문제
 	UPROPERTY()
@@ -76,6 +83,8 @@ public:
 	UFUNCTION(BlueprintCallable) // 정답 처리
 	void OnJudgeDone(bool bCorrect);
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sign")
+	UDataTable* MotionTable = nullptr;
 	
 
 	/////////////////////////////위젯 관련/////////////////////////////////////
@@ -86,6 +95,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	UUserWidget* CurrentWidget;
 
+
+	UPROPERTY()
+	UProblemUI* PlayingUI = nullptr;
+
+	
 	// 위젯들
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|UI")
 	TSubclassOf<UUserWidget> MainMenuClass;
