@@ -18,10 +18,15 @@ public class KSLProject : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"Slate"
+			"Slate",
+			"HTTP",
+			"WebSockets", 
+			"Json", 
+			"JsonUtilities", 
+			"ImageWrapper", 
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[] { "WebSockets", "MediaAssets" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"KSLProject",
