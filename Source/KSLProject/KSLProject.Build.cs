@@ -24,6 +24,7 @@ public class KSLProject : ModuleRules
 			"Json", 
 			"JsonUtilities", 
 			"ImageWrapper", 
+			"Niagara", 
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "WebSockets", "MediaAssets" });

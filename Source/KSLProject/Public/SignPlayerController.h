@@ -7,6 +7,7 @@
 #include "MainCharacter.h"
 #include "MainUI.h"
 #include "ProblemUI.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/PlayerController.h"
 #include "SignPlayerController.generated.h"
 
@@ -131,4 +132,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|Sound")
 	class USoundBase* FalseSound;
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|Sound")
+	class USoundBase* NextLevelSound;
+
+	// vfx
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|VFX")
+	UNiagaraSystem* NS_TrueSystem;
+	
 };

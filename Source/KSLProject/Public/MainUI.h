@@ -22,12 +22,14 @@ public:
 	ASignPlayerController* pc;
 
 	// 버튼
+	
+	
 	// 시작 버튼
 	UPROPERTY(meta = (BindWidget)) 
 	class UTextBlock* txt_start;
 	
 	UPROPERTY(meta = (BindWidget)) 
-	class UButton* btn_start;
+	class UButton* btn_start; // 시작버튼
 	
 	// 숫자
 	UPROPERTY(meta = (BindWidget)) 
@@ -52,5 +54,13 @@ public:
 	UFUNCTION()
 	void btn_click_word3();
 
-	
+
+	// 주제 선택 메뉴로 가기 위해서 hidden 처리
+	UFUNCTION(BlueprintImplementableEvent)
+	void GoSelectTopic();
+
+
+	void ChangeToNextLevel();
+
+	FTimerHandle TimerHandle;
 };

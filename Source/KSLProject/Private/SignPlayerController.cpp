@@ -152,7 +152,11 @@ void ASignPlayerController::BeginLesson()
 void ASignPlayerController::SelectTopic()
 {
 	SetGameState(GamePlayState::MainMenu);
-	
+
+	if (UMainUI* MainUI = Cast<UMainUI>(CurrentWidget))
+	{
+		MainUI->GoSelectTopic();
+	}
 }
 
 
@@ -163,6 +167,7 @@ void ASignPlayerController::PlayMotion()
 	if (CurIdx >= QuestionOrder.Num())
 	{
 		SetGameState(GamePlayState::TopicComplete);
+		UGameplayStatics::PlaySound2D(GetWorld(), NextLevelSound);
 		return;
 	}
 
@@ -214,6 +219,8 @@ void ASignPlayerController::JudgeNextStep(bool IsCorrect)
 		if (TrueSound)
 		{
 			UGameplayStatics::PlaySound2D(GetWorld(), TrueSound);
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NS_TrueSystem
+				, FVector(200.000000,10.000000,160.000000));
 		}
 		 
 		CurIdx++;

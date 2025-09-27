@@ -4,6 +4,7 @@
 #include "TopicCompleteUI.h"
 #include "SignPlayerController.h"
 #include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
 
 void UTopicCompleteUI::NativeConstruct()
 {
@@ -32,5 +33,5 @@ void UTopicCompleteUI::clickOthertopic()
 
 void UTopicCompleteUI::clickExit()
 {
-	pc->SetGameState(GamePlayState::ResultMenu);
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
