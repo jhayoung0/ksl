@@ -17,6 +17,7 @@ class KSLPROJECT_API UCharacterAnimInstance : public UAnimInstance
 
 public:// ABP
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bMontageplaying = false;
 	
 };

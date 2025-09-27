@@ -12,7 +12,7 @@ void UMainUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 	// 버튼 클릭시 topic 담아두기
-	if (ensure(btn_word1))                                                                                                                                           
+	if (btn_word1)                                                                                                                                           
 	{                                                                                                                                                               
 		btn_word1->OnClicked.AddDynamic(this, &UMainUI::btn_click_word1);
 		btn_word2->OnClicked.AddDynamic(this, &UMainUI::btn_click_word2);

@@ -21,13 +21,7 @@ public: // display word
 
 
 	// 단어 갱신용 
-	UFUNCTION(BlueprintCallable)
-	void SetSignWord(const FText& InText)
-	{
-		if (txt_signword)
-		{
-			txt_signword->SetText(InText);
-		}
-	}
+	UFUNCTION()
+	void SetSignWord(const FText& InText);
 	
 };

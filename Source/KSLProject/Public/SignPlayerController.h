@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "JudgeResult.h"
 #include "MainCharacter.h"
+#include "MainUI.h"
 #include "ProblemUI.h"
 #include "GameFramework/PlayerController.h"
 #include "SignPlayerController.generated.h"
@@ -20,8 +21,7 @@
      MainMenu,		// 메인메뉴
      TopicSelect,	// 주제 선택
      LessonIntro,	// 문제 시작하기 전 애니메이션 및 카운트다운?
-     PlayingOneSequence, // 문제가 주어짐 (캐릭터 모션)
- 	 PlayingTwoSequence, // 두번째 시퀀스 있는 경우
+     Playing, // 문제가 주어짐 (캐릭터 모션)
      WaitingJudge,	// 정답 판정 기다리기
      Feedback,		// 정답 여부 표시
      TopicComplete, // 해당 주제 끝 
@@ -62,9 +62,20 @@ public:
 	FJudgeResult JudgeResult;
 	
 	
-	// 현재 진행되는 문제
+	// 현재 진행되는 문제 (대기중일때 -1 해찬이거)
 	UPROPERTY()
 	FString label = TEXT("-1");
+
+	// 현재 진행 문제 (내 거) 
+	UPROPERTY()
+	FString CurLabel;
+	
+	// 문제 순서 인덱스
+	TArray<FString> QuestionOrder;
+
+	// 현재 몇번째 문제인지
+	int32 CurIdx = 0;
+
 	
 	// 메인 캐릭터
 	UPROPERTY()
@@ -73,20 +84,22 @@ public:
 	// 전환될때 실행될 함수
 	UFUNCTION(BlueprintCallable) // 문제 시작
 	void BeginLesson();
-	
-	UFUNCTION(BlueprintCallable)
-	void PlayOneSeqMotion();
 
 	UFUNCTION(BlueprintCallable)
-	void PlayTwoSeqMotion();
+	void SelectTopic();
 	
-	UFUNCTION(BlueprintCallable) // 정답 처리
-	void OnJudgeDone(bool bCorrect);
+	UFUNCTION(BlueprintCallable)
+	void PlayMotion();
+
+	UFUNCTION(BlueprintCallable)
+	void JudgeNextStep(bool bInIsCorrect);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sign")
 	UDataTable* MotionTable = nullptr;
 	
-
+	UPROPERTY()
+	bool bCorrect;
+	
 	/////////////////////////////위젯 관련/////////////////////////////////////
 	UFUNCTION()
 	void ShowWidgetForState(GamePlayState State); // 위젯 스위칭(옵션)
@@ -94,18 +107,13 @@ public:
 	// 현재 위젯
 	UPROPERTY(EditAnywhere)
 	UUserWidget* CurrentWidget;
-
-
-	UPROPERTY()
-	UProblemUI* PlayingUI = nullptr;
-
 	
 	// 위젯들
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|UI")
-	TSubclassOf<UUserWidget> MainMenuClass;
+	TSubclassOf<UMainUI> MainMenuClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|UI")
-	TSubclassOf<UUserWidget> PlayingClass;
+	TSubclassOf<UProblemUI> PlayingClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|UI")
 	TSubclassOf<UUserWidget> FeedbackClass;
@@ -115,5 +123,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|UI")
 	TSubclassOf<UUserWidget> ResultClass;
-	
+
+
+	// 사운드
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|Sound")
+	class USoundBase* TrueSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|Sound")
+	class USoundBase* FalseSound;
 };

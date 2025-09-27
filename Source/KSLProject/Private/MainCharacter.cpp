@@ -2,9 +2,13 @@
 
 
 #include "Public/MainCharacter.h"
+#include "CharacterAnimInstance.h"
 #include "MotionRow.h"
+#include "SignPlayerController.h"
+#include "Animation/AnimInstance.h"
 
 
+class ASignPlayerController;
 // Sets default values
 AMainCharacter::AMainCharacter()
 {
@@ -26,23 +30,21 @@ void AMainCharacter::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void AMainCharacter::SetupPlayerInputComponent(
-	UInputComponent* PlayerInputComponent)
+void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 
-// 
-bool AMainCharacter::PlaySignMontageByKey(FString label, int32 Seqcount, float PlayRate, float StartTime)
+// 몽타주를 rowname으로 찾아서 재생하자.
+bool AMainCharacter::PlaySignMontageByKey(FName RowKey)
 {
 	if (!MotionTable)
 	{
 		return false;
 	}
-	
-	
-	const FMotionRow* Row = MotionTable->FindRow<FMotionRow>(FName(label), TEXT("PlaySignMontageByKey"));
+
+	const FMotionRow* Row = MotionTable->FindRow<FMotionRow>(RowKey, TEXT("PlaySignMontageByKey"));
 	if (!Row)
 	{
 		return false;
@@ -54,15 +56,66 @@ bool AMainCharacter::PlaySignMontageByKey(FString label, int32 Seqcount, float P
 
 	if (USkeletalMeshComponent* MeshComp = GetMesh())
 	{
-		if (UAnimInstance* AnimInst = MeshComp->GetAnimInstance())
+		if (UCharacterAnimInstance* AnimInst =Cast<UCharacterAnimInstance>(MeshComp->GetAnimInstance()))
 		{
-			const float Len = AnimInst->Montage_Play(Row->signMontage, PlayRate,
-				EMontagePlayReturnType::MontageLength, StartTime, true);
+			const float Len = AnimInst->Montage_Play(Row->signMontage);
 			return (Len > 0.f);
 		}
 	}
 	return false;
 	
 }
+
+bool AMainCharacter::PlaySignAnimByKey(FName Rowkey)
+{
+	const FMotionRow* Row = MotionTable->FindRow<FMotionRow>(Rowkey, TEXT("PlaySignAnimByKey"));
+	if (USkeletalMeshComponent* MeshComp = GetMesh())
+	{
+		// AnimBP를 거치지 않고 단일 애니메이션 모드로 전환
+		MeshComp->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+
+		// 루프 재생
+		MeshComp->PlayAnimation(Row->signAnim, true);
+		return true;
+	}
+	return false;
+}
+
+
+
+void AMainCharacter::PlayResultMontage(bool bIsCorrect)
+{
+	if (UAnimInstance* AnimInst = GetMesh()->GetAnimInstance())
+	{
+		UAnimMontage* MontageToPlay = bIsCorrect ? TrueMontage : FalseMontage;
+		if (MontageToPlay)
+		{
+			//AnimInst->OnMontageEnded.RemoveDynamic(this, &AMainCharacter::onResultMontageEnded);
+			//AnimInst->OnMontageEnded.AddDynamic(this, &AMainCharacter::onResultMontageEnded);
+			float Len = AnimInst->Montage_Play(MontageToPlay);
+			if (Len > 0.f)
+			{
+			}
+		}
+	}
+}
+
+
+// 주제 완료 
+void AMainCharacter::TopicComplete()
+{
+	// 완료 몽타주 실행
+	if (USkeletalMeshComponent* MeshComp = GetMesh())
+	{
+		if (UCharacterAnimInstance* AnimInst =Cast<UCharacterAnimInstance>(MeshComp->GetAnimInstance()))
+		{
+			 AnimInst->Montage_Play(TopicCompleteMontage);
+		}
+	}
+}
+
+
+
+
 
 

@@ -32,4 +32,8 @@ struct FMotionRow : public FTableRowBase
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UAnimMontage* signMontage; // 실행 모션
+
+		
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UAnimSequence* signAnim; // 실행 애니메이션
 };

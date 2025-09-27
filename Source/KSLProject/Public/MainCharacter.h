@@ -31,10 +31,34 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sign")
 	UDataTable* MotionTable = nullptr;
 
-	// label 재생
+	// 몽타주 재생
 	UFUNCTION(BlueprintCallable, Category="Sign")
-	bool PlaySignMontageByKey(FString label, int32 Seqcount, float PlayRate = 1.f, float StartTime = 0.f);
+	bool PlaySignMontageByKey(FName Rowkey);
 
+	// 몽타주 재생
+	UFUNCTION(BlueprintCallable, Category="Sign")
+	bool PlaySignAnimByKey(FName Rowkey);
+	
+	
+
+	// 정답, 오답 몽타주 재생
+	UFUNCTION(BlueprintCallable, Category="Sign")
+	void PlayResultMontage(bool IsCorrect);
+
+
+	// 주제 완료 몽타주 실행
+	UFUNCTION(BlueprintCallable, Category="Sign")
+	void TopicComplete();
+	
+	// 몽타주
+	UPROPERTY(EditAnywhere, Category = "Montage")
+	UAnimMontage* TrueMontage;
+
+	UPROPERTY(EditAnywhere, Category= "Montage")
+	UAnimMontage* FalseMontage;
+
+	UPROPERTY(EditAnywhere, Category= "Montage")
+	UAnimMontage* TopicCompleteMontage;
 
 	
 };
