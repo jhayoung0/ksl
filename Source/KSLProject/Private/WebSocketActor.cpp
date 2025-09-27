@@ -9,6 +9,7 @@
 #include "Engine/World.h"
 #include "IImageWrapper.h"
 #include "IImageWrapperModule.h"
+#include "MainCharacter.h"
 #include "Kismet/KismetRenderingLibrary.h"
 #include "Misc/Base64.h"
 #include "Modules/ModuleManager.h"
@@ -16,6 +17,7 @@
 #include "TimerManager.h"
 #include "WebSocketsModule.h"
 #include "Blueprint/WidgetTree.h"
+#include "Kismet/GameplayStatics.h"
 #include "Runtime/MediaAssets/Public/MediaPlayer.h"
 #include "Slate/WidgetRenderer.h"
 
@@ -206,8 +208,22 @@ void AWebSocketActor::OnMessageReceived(const FString& Message)
 	{
 		// 서버가 "True"라는 문자열을 보내므로, 문자열로 받은 후 비교하여 bool 값으로 변환합니다.
 		FString SuccessString;
+
+		bool bIsNetSuccess = false;
+		if (JsonObject->TryGetStringField(TEXT("code"), SuccessString))
+		{
+			bIsNetSuccess = (SuccessString == TEXT("200"));
+		}
+		LastServerResponse.Code = bIsNetSuccess;
+		if (!LastServerResponse.Code)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Failed to Connect, code : 400")); 
+			return;
+		}
+			
+		
 		bool bIsSuccess = false;
-		if (JsonObject->TryGetStringField(TEXT("is_success"), SuccessString))
+		if (JsonObject->TryGetStringField(TEXT("is_correct"), SuccessString))
 		{
 			bIsSuccess = (SuccessString == TEXT("True"));
 		}
@@ -216,13 +232,14 @@ void AWebSocketActor::OnMessageReceived(const FString& Message)
 		FString SignId;
 		JsonObject->TryGetStringField(TEXT("sign_id"), SignId);
 
-		LastServerResponse.bIsSuccess = bIsSuccess;
+		LastServerResponse.bIsCorrect = bIsSuccess;
 		LastServerResponse.SignId = SignId;
 
 		// 로그 출력 형식을 bool(%s)과 FString(%s)에 맞게 수정합니다.
-		UE_LOG(LogTemp, Log, TEXT("JSON response - success: %s, sign_id: %s"), 
+		UE_LOG(LogTemp, Log, TEXT("JSON response - success: %s, sign_id: %s, code: %s"), 
 			(bIsSuccess ? TEXT("true") : TEXT("false")), 
-			*SignId);
+			*SignId,
+			*SuccessString);
 
 		if (bIsSuccess)
 		{
@@ -257,6 +274,42 @@ void AWebSocketActor::StopSendingFrames()
 
 void AWebSocketActor::SendFrameData()
 {
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("player"), FoundActors);
+
+	int32 SignValue = -1; // 기본값은 음수로 설정하여, 못 찾았을 경우 전송을 중지하도록 함
+
+	if (FoundActors.Num() > 0)
+	{
+		// 찾은 액터를 실제 클래스로 형변환(Cast) 시도
+		// "AMyPlayerActor"를 실제 사용하는 액터 클래스 이름으로 반드시 변경해야 합니다.
+		AMainCharacter* PlayerActor = Cast<AMainCharacter>(FoundActors[0]); 
+		if (PlayerActor)
+		{
+			// 형변환에 성공하면 sign 값을 읽어옵니다.
+			//SignValue = PlayerActor->sign;
+		}
+	}
+
+	// 2. sign 값에 따라 전송 여부 결정
+	if (SignValue < 0)
+	{
+		// sign 값이 음수이면, 전송 상태를 false로 바꾸고 이번 프레임 전송을 중단합니다.
+		if (bShouldSendFrames)
+		{
+			SetFrameSending(false); // 타이머를 멈추고 bool 변수를 업데이트합니다.
+		}
+		return; // 함수를 즉시 종료하여 아래의 이미지 전송 로직이 실행되지 않도록 합니다.
+	}
+	else
+	{
+		// sign 값이 양수인데 전송이 꺼져있었다면 다시 켭니다.
+		if (!bShouldSendFrames)
+		{
+			SetFrameSending(true);
+		}
+	}
+	
 	if (!WebSocket.IsValid())
 	{
 		return;
@@ -311,6 +364,8 @@ void AWebSocketActor::SendFrameData()
 	FString Base64Image = FBase64::Encode(PngBytes);
 
 	TSharedRef<FJsonObject> JsonObject = MakeShared<FJsonObject>();
+
+	//JsonObject->SetNumberField(TEXT("sign_id"), SignValue);
 	JsonObject->SetNumberField(TEXT("sign_id"), 0);
 	JsonObject->SetStringField(TEXT("images"), Base64Image);
 

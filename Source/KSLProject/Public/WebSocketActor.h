@@ -17,10 +17,12 @@ struct FServerResponseData
 
 	// 블루프린트에서 읽기 전용으로 노출시킵니다.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WebSocket Response")
-	bool bIsSuccess = false;
+	bool bIsCorrect = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WebSocket Response")
 	FString SignId;
+
+	bool Code;
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnServerResponseReceived, const FServerResponseData&, ResponseData);
