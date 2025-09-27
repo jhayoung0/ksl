@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "JudgeResult.h"
+#include "LevelSequencePlayer.h"
 #include "MainCharacter.h"
 #include "MainUI.h"
 #include "ProblemUI.h"
 #include "NiagaraFunctionLibrary.h"
+#include "WebSocketActor.h"
 #include "GameFramework/PlayerController.h"
 #include "SignPlayerController.generated.h"
 
@@ -39,6 +41,10 @@ class KSLPROJECT_API ASignPlayerController : public APlayerController
 
 public:
 
+	// 웹소켓 참조
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AWebSocketActor* WebSocketActorRef = nullptr;
+	
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	// 현재 상태 가져오기
@@ -140,5 +146,27 @@ public:
 	// vfx
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Flow|VFX")
 	UNiagaraSystem* NS_TrueSystem;
+	
+	
+	// 레벨 시퀀스
+	UPROPERTY(EditAnywhere)
+	ULevelSequencePlayer* LevelEndPlayer;
+	
+	UFUNCTION()
+	void PlayTopicSelectSeq();
+	
+	UFUNCTION()
+	void PlayLevelEndSeq();
+
+	UFUNCTION()
+	void OnPlayTopicSelectSeqFinished();
+	
+	UFUNCTION()
+	void OnLevelEndSequenceDelayed();
+
+	
+	UFUNCTION()
+    void OnLevelEndSequenceFinished();
+        
 	
 };

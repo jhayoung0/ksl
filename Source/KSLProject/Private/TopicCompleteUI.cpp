@@ -4,6 +4,7 @@
 #include "TopicCompleteUI.h"
 #include "SignPlayerController.h"
 #include "Components/Button.h"
+#include "Components/Image.h"
 #include "Kismet/GameplayStatics.h"
 
 void UTopicCompleteUI::NativeConstruct()
@@ -33,5 +34,11 @@ void UTopicCompleteUI::clickOthertopic()
 
 void UTopicCompleteUI::clickExit()
 {
-	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	UKismetSystemLibrary::QuitGame(GetWorld(), pc, EQuitPreference::Quit, true);
+}
+
+
+void UTopicCompleteUI::ShowbackgroundImg()
+{
+	img_background->SetVisibility(ESlateVisibility::Visible);
 }

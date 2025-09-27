@@ -19,9 +19,11 @@ public: // display word
 	UPROPERTY(meta = (BindWidget))  // bind하려고
 	class UTextBlock* txt_signword;
 
-
+	
 	// 단어 갱신용 
 	UFUNCTION()
 	void SetSignWord(const FText& InText);
+	
+
 	
 };
