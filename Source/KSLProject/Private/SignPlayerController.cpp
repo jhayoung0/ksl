@@ -102,46 +102,67 @@ void ASignPlayerController::BeginLesson()
 	if (topicId == 0)
 	{
 		// 0~10
-		for (int32 i = 0; i <= 10; ++i)
+		for (int32 i = 0; i <= 6; ++i)
 		{
 			QuestionOrder.Add(FString::FromInt(i));
 		}
 	}
 	else if (topicId == 1)
 	{
-		// 11~24
-		for (int32 i = 11; i <= 24; ++i)
+		//// 11~24
+		//for (int32 i = 11; i <= 24; ++i)
+		//{
+		//	QuestionOrder.Add(FString::FromInt(i));
+		//}
+
+		TArray<int32> FixedIndices = { 11, 14, 15, 16, 24 };
+		for (int32 idx : FixedIndices)
 		{
-			QuestionOrder.Add(FString::FromInt(i));
+			QuestionOrder.Add(FString::FromInt(idx));
 		}
 		
 	}
 	else if (topicId == 2) // 문제 단위(시퀀스 묶음)로 10문제 추출
 	{
+		if (!MotionTable)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("MotionTable is null"));
+			return;
+		}
+
+		// 실제 존재하는 Row 목록만 하드코딩
+		TArray<int32> ValidIndices = { 0, 1, 2, 3, 4, 5, 6, 11, 14, 15, 16, 24 };
+
 		TArray<TArray<FString>> Groups;
 		int32 i = 0;
 
-		while (i <= 24)
+		while (i < ValidIndices.Num())
 		{
-			FName Key = *FString::FromInt(i);
-			const FMotionRow* Row = MotionTable ? MotionTable->FindRow<FMotionRow>(Key, TEXT("BeginLesson")) : nullptr;
+			int32 StartIdx = ValidIndices[i];
+			const FName Key = *FString::FromInt(StartIdx);
+			const FMotionRow* Row = MotionTable->FindRow<FMotionRow>(Key, TEXT("BeginLesson"));
 
-			int32 SeqCnt = 1;
-			if (Row)
+			// 잘못된 Row면 스킵
+			if (!Row || !Row->signAnim)
 			{
-				SeqCnt = FMath::Max(1, FCString::Atoi(*Row->seq_count.ToString()));
+				i++;
+				continue;
 			}
 
-			int32 Last = FMath::Min(i + SeqCnt - 1, 24);
+			int32 SeqCnt = FMath::Max(1, FCString::Atoi(*Row->seq_count.ToString()));
 
+			// 허용된 인덱스 범위 내에서만 그룹 생성
 			TArray<FString> Group;
-			for (int32 k = i; k <= Last; ++k)
-			{
-				Group.Add(FString::FromInt(k));
-			}
-			Groups.Add(MoveTemp(Group));
+			Group.Add(FString::FromInt(StartIdx));
 
-			i = Last + 1;
+			// 시퀀스 묶음 고려 (예: SeqCnt가 2 이상이면 다음 것도 포함)
+			for (int32 j = 1; j < SeqCnt && (i + j) < ValidIndices.Num(); j++)
+			{
+				Group.Add(FString::FromInt(ValidIndices[i + j]));
+			}
+
+			Groups.Add(MoveTemp(Group));
+			i += SeqCnt;
 		}
 
 		// 랜덤 셔플
@@ -151,7 +172,7 @@ void ASignPlayerController::BeginLesson()
 			Groups.Swap(j, SwapIdx);
 		}
 
-		// 앞에서 10문제만 선택
+		// 최대 10세트만 채택
 		const int32 Take = FMath::Min(10, Groups.Num());
 		for (int32 gi = 0; gi < Take; ++gi)
 		{
@@ -160,6 +181,49 @@ void ASignPlayerController::BeginLesson()
 				QuestionOrder.Add(L);
 			}
 		}
+
+		//TArray<TArray<FString>> Groups;
+		//int32 i = 0;
+
+		//while (i <= 24)
+		//{
+		//	FName Key = *FString::FromInt(i);
+		//	const FMotionRow* Row = MotionTable ? MotionTable->FindRow<FMotionRow>(Key, TEXT("BeginLesson")) : nullptr;
+
+		//	int32 SeqCnt = 1;
+		//	if (Row)
+		//	{
+		//		SeqCnt = FMath::Max(1, FCString::Atoi(*Row->seq_count.ToString()));
+		//	}
+
+		//	int32 Last = FMath::Min(i + SeqCnt - 1, 24);
+
+		//	TArray<FString> Group;
+		//	for (int32 k = i; k <= Last; ++k)
+		//	{
+		//		Group.Add(FString::FromInt(k));
+		//	}
+		//	Groups.Add(MoveTemp(Group));
+
+		//	i = Last + 1;
+		//}
+
+		//// 랜덤 셔플
+		//for (int32 j = 0; j < Groups.Num(); ++j)
+		//{
+		//	int32 SwapIdx = FMath::RandRange(j, Groups.Num() - 1);
+		//	Groups.Swap(j, SwapIdx);
+		//}
+
+		//// 앞에서 10문제만 선택
+		//const int32 Take = FMath::Min(10, Groups.Num());
+		//for (int32 gi = 0; gi < Take; ++gi)
+		//{
+		//	for (const FString& L : Groups[gi])
+		//	{
+		//		QuestionOrder.Add(L);
+		//	}
+		//}
 	}
 	CurIdx = 0; // 현재 문제 번호 0번으로 초기화 해주기 
 	//// 레벨 셀렉트 시퀀스 재생
@@ -326,7 +390,7 @@ void ASignPlayerController::PlayTopicSelectSeq()
 
 	if (UEndGameUI* endgameUI = Cast<UEndGameUI>(CurrentWidget))
 	{
-		endgameUI->SetUIText(FText::FromString(TEXT("Start!")));
+		endgameUI->SetUIText(FText::FromString(TEXT("시작!")));
 	}
 	
 	static const TCHAR* Path = TEXT("/Game/Game/Sequence/TopicSelectSequence.TopicSelectSequence");

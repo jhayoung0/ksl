@@ -56,7 +56,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 	FOnServerResponseReceived OnSuccessResponse;
 
-	UFUNCTION(CallInEditor, Category = "WebSocket|Debug")
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "WebSocket|Debug")
 	void SimulateSuccessfulResponse();
 
 protected:
