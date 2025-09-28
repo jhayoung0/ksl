@@ -349,7 +349,8 @@ void AWebSocketActor::StartSendingFrames()
 	if (WebSocket.IsValid() && WebSocket->IsConnected() && !GetWorld()->GetTimerManager().IsTimerActive(FrameSendTimerHandle))
 	{
 		UE_LOG(LogTemp, Log, TEXT("Starting frame data sending timer..."));
-		GetWorld()->GetTimerManager().SetTimer(FrameSendTimerHandle, this, &AWebSocketActor::SendFrameData, 1.f / 6.f, true);
+		//GetWorld()->GetTimerManager().SetTimer(FrameSendTimerHandle, this, &AWebSocketActor::SendFrameData, 1.f / 6.f, true);
+		GetWorld()->GetTimerManager().SetTimer(FrameSendTimerHandle, this, &AWebSocketActor::SendFrameData, 1.f, true);
 	}
 }
 
@@ -469,7 +470,7 @@ void AWebSocketActor::SendFrameData()
 	TSharedRef<FJsonObject> JsonObject = MakeShared<FJsonObject>();
 
 	//JsonObject->SetNumberField(TEXT("sign_id"), SignValue);
-	JsonObject->SetNumberField(TEXT("sign_id"), SignValue);
+	JsonObject->SetStringField(TEXT("sign_id"), FString::FromInt(SignValue));
 	JsonObject->SetStringField(TEXT("images"), Base64Image);
 
 	FString JsonString;

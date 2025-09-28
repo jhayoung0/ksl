@@ -14,12 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f48fe557-713c-48a2-bc2e-50b5346c2b0c" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.KSLProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KSLProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Game/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/Maps/TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Game/UI/WBP_PlayUIWebcamTest.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Game/UI/WBP_PlayUIWebcamTest.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/SignPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/SignPlayerController.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KSLProject/Private/WebSocketActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Private/WebSocketActor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KSLProject/Public/WebSocketActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KSLProject/Public/WebSocketActor.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +50,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "C/C++ 프로젝트.KSLProject.executor": "Debug",
+    "C/C++ 프로젝트.KSLProject.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
@@ -227,16 +222,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/KSLProject/Private/WebSocketActor.cpp</url>
-          <line>363</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/KSLProject/Private/WebSocketActor.cpp</url>
-          <line>348</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
