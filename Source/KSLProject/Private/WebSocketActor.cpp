@@ -10,8 +10,10 @@
 #include "IImageWrapper.h"
 #include "IImageWrapperModule.h"
 #include "MainCharacter.h"
+#include "SignPlayerController.h"
 #include "Kismet/KismetRenderingLibrary.h"
 #include "Misc/Base64.h"
+#include "Misc/DefaultValueHelper.h"
 #include "Modules/ModuleManager.h"
 #include "Serialization/JsonSerializer.h"
 #include "TimerManager.h"
@@ -38,6 +40,11 @@ void AWebSocketActor::SetFrameSending(bool bShouldSend)
 	{
 		StopSendingFrames();
 	}
+}
+
+void AWebSocketActor::RequestStartSendingFrames()
+{
+	SetFrameSending(true);
 }
 
 void AWebSocketActor::BeginPlay()
@@ -88,6 +95,14 @@ void AWebSocketActor::BeginPlay()
 	
 	WidgetRenderer = MakeShared<FWidgetRenderer>(true);
 	InitializeWebSocket();
+
+	if (ConnectionCheckInterval > 0.f)
+	{
+		if (UWorld* World = GetWorld())
+		{
+			World->GetTimerManager().SetTimer(ConnectionCheckTimerHandle, this, &AWebSocketActor::CheckConnectionAndReconnect, ConnectionCheckInterval, true);
+		}
+	}
 }
 
 void AWebSocketActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -95,6 +110,7 @@ void AWebSocketActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	if (UWorld* World = GetWorld())
 	{
 		World->GetTimerManager().ClearTimer(FrameSendTimerHandle);
+		World->GetTimerManager().ClearTimer(ConnectionCheckTimerHandle);
 	}
 
 	CloseWebSocket();
@@ -178,10 +194,10 @@ void AWebSocketActor::OnConnected()
 {
 	UE_LOG(LogTemp, Log, TEXT("Connected to server."));
 
-	if (bShouldSendFrames)
-	{
-		StartSendingFrames();
-	}
+	// if (bShouldSendFrames)
+	// {
+		//StartSendingFrames();
+	//}
 	
 	//SendTestData(); 
 
@@ -244,11 +260,82 @@ void AWebSocketActor::OnMessageReceived(const FString& Message)
 		if (bIsSuccess)
 		{
 			OnSuccessResponse.Broadcast(LastServerResponse);
+
+			if (UWorld* World = GetWorld())
+			{
+				ASignPlayerController* SignPlayerController = Cast<ASignPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
+				if (SignPlayerController)
+				{
+					SignPlayerController->JudgeNextStep(true);
+				}
+			}
 		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to parse JSON response."));
+	}
+}
+
+void AWebSocketActor::SimulateSuccessfulResponse()
+{
+	LastServerResponse.bIsCorrect = true;
+	LastServerResponse.Code = true;
+
+	if (UWorld* World = GetWorld())
+	{
+		if (ASignPlayerController* SignPlayerController = Cast<ASignPlayerController>(UGameplayStatics::GetPlayerController(World, 0)))
+		{
+			LastServerResponse.SignId = SignPlayerController->label;
+		}
+	}
+
+	if (LastServerResponse.SignId.IsEmpty())
+	{
+		LastServerResponse.SignId = TEXT("Simulated");
+	}
+
+	OnSuccessResponse.Broadcast(LastServerResponse);
+
+	if (UWorld* World = GetWorld())
+	{
+		if (ASignPlayerController* SignPlayerController = Cast<ASignPlayerController>(UGameplayStatics::GetPlayerController(World, 0)))
+		{
+			SignPlayerController->JudgeNextStep(true);
+		}
+	}
+}
+
+void AWebSocketActor::CheckConnectionAndReconnect()
+{
+	int32 CurrentLabelValue = -1;
+
+	if (UWorld* World = GetWorld())
+	{
+		if (ASignPlayerController* SignPlayerController = Cast<ASignPlayerController>(UGameplayStatics::GetPlayerController(World, 0)))
+		{
+			int32 ParsedValue = -1;
+			if (FDefaultValueHelper::ParseInt(SignPlayerController->label, ParsedValue))
+			{
+				CurrentLabelValue = ParsedValue;
+			}
+		}
+	}
+
+	if (CurrentLabelValue < 0)
+	{
+		return;
+	}
+
+	if (!WebSocket.IsValid())
+	{
+		InitializeWebSocket();
+		return;
+	}
+
+	if (!WebSocket->IsConnected())
+	{
+		WebSocket->Connect();
 	}
 }
 
@@ -288,6 +375,22 @@ void AWebSocketActor::SendFrameData()
 		{
 			// 형변환에 성공하면 sign 값을 읽어옵니다.
 			//SignValue = PlayerActor->sign;
+		}
+	}
+
+	if (SignValue < 0)
+	{
+		if (UWorld* World = GetWorld())
+		{
+			ASignPlayerController* SignPlayerController = Cast<ASignPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
+			if (SignPlayerController)
+			{
+				int32 ParsedValue = -1;
+				if (FDefaultValueHelper::ParseInt(SignPlayerController->label, ParsedValue))
+				{
+					SignValue = ParsedValue;
+				}
+			}
 		}
 	}
 
@@ -366,7 +469,7 @@ void AWebSocketActor::SendFrameData()
 	TSharedRef<FJsonObject> JsonObject = MakeShared<FJsonObject>();
 
 	//JsonObject->SetNumberField(TEXT("sign_id"), SignValue);
-	JsonObject->SetNumberField(TEXT("sign_id"), 0);
+	JsonObject->SetNumberField(TEXT("sign_id"), SignValue);
 	JsonObject->SetStringField(TEXT("images"), Base64Image);
 
 	FString JsonString;

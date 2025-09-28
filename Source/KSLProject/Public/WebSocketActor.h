@@ -43,12 +43,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WebSocket")
 	bool bShouldSendFrames = true;
 
+	UPROPERTY(EditAnywhere, Category = "WebSocket")
+	float ConnectionCheckInterval = 3.0f;
+
 	// 블루프린트에서 호출할 수 있는 함수를 선언합니다.
 	UFUNCTION(BlueprintCallable, Category = "WebSocket")
 	void SetFrameSending(bool bShouldSend);
 
+	UFUNCTION(BlueprintCallable, Category = "WebSocket")
+	void RequestStartSendingFrames();
+
 	UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 	FOnServerResponseReceived OnSuccessResponse;
+
+	UFUNCTION(CallInEditor, Category = "WebSocket|Debug")
+	void SimulateSuccessfulResponse();
 
 protected:
 	virtual void BeginPlay() override;
@@ -76,6 +85,7 @@ protected:
 	FString camurl;
 
 	FTimerHandle FrameSendTimerHandle;
+	FTimerHandle ConnectionCheckTimerHandle;
 
 	void SendFrameData();
 	bool CaptureWidgetToRenderTarget();
@@ -93,6 +103,7 @@ private:
 
 	void StartSendingFrames();
 	void StopSendingFrames();
+	void CheckConnectionAndReconnect();
 
 	TSharedPtr<IWebSocket> WebSocket;
 

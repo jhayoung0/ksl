@@ -33,6 +33,13 @@ void ASignPlayerController::BeginPlay()
 		}
 	}
 	
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("WebSocket"), FoundActors);                                                                             
+	if (FoundActors.Num() > 0)                                                                                                                                      
+	{                                                                                                                                                               
+		WebSocketActorRef = Cast<AWebSocketActor>(FoundActors[0]);                                                                                                  
+	} 
+	
+	
 	SetGameState(GamePlayState::MainMenu);
 
 	// 이미지 보내지 않기
@@ -219,7 +226,12 @@ void ASignPlayerController::PlayMotion()
 	}
 
 	// 4) 현재 문제 업데이트 (이 문제 가지고 서버에 판정 요청) 
-	label = QuestionOrder[CurIdx]; 
+	label = QuestionOrder[CurIdx];
+	
+	if (WebSocketActorRef)                                                                                                                                          
+	{                                                                                                                                                               
+		WebSocketActorRef->RequestStartSendingFrames();                                                                                                             
+	}  
 }
 
 
