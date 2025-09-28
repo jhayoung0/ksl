@@ -13,4 +13,12 @@ UCLASS()
 class KSLPROJECT_API UEndGameUI : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* Txt_changed;
+
+	UFUNCTION()
+	void SetUIText(const FText& InText);
+
 };

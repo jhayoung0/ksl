@@ -24,10 +24,13 @@ public class KSLProject : ModuleRules
 			"Json", 
 			"JsonUtilities", 
 			"ImageWrapper", 
-			"Niagara", 
+			"Niagara",
+			"MovieScene",
+			"MovieSceneTracks",
+			"LevelSequence",
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "WebSockets", "MediaAssets" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "WebSockets", "MediaAssets", "LevelSequence", "MovieScene", "MovieSceneTracks" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"KSLProject",

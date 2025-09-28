@@ -15,12 +15,16 @@ class KSLPROJECT_API UTopicCompleteUI : public UUserWidget
 {
 	GENERATED_BODY()
 
+
+public:
 	UPROPERTY(meta=(BindWidget))
 	class UButton* btn_othertopic;
 
 	UPROPERTY(meta=(BindWidget))
 	class UButton* btn_exit;
+	
 
+	
 	virtual void NativeConstruct() override;
 	virtual void NativeOnInitialized() override;
 
@@ -32,4 +36,10 @@ class KSLPROJECT_API UTopicCompleteUI : public UUserWidget
 
 	UPROPERTY()
 	ASignPlayerController* pc;
+
+	UPROPERTY(meta=(BindWidget))
+	class UImage* img_background;
+	
+	UFUNCTION()
+	void ShowbackgroundImg();
 };

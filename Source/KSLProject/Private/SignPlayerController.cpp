@@ -1,10 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SignPlayerController.h"
+
+#include "EndGameUI.h"
+#include "LevelSequence.h"
 #include "MotionRow.h"
 #include "NetworkMessage.h"
 #include "ProblemUI.h"
+#include "LevelSequence.h"
+#include "LevelSequencePlayer.h"
+#include "LevelSequenceActor.h"
+#include "TopicCompleteUI.h"
 #include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Components/Image.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -146,7 +155,15 @@ void ASignPlayerController::BeginLesson()
 		}
 	}
 	CurIdx = 0; // 현재 문제 번호 0번으로 초기화 해주기 
-	SetGameState(GamePlayState::Playing);  // 플레이 스테이트로 변경
+	//// 레벨 셀렉트 시퀀스 재생
+	PlayTopicSelectSeq();
+	
+	if (QuestionOrder.Num() == 0)                                                                                                                                    
+	{                                                                                                                                                                
+		UE_LOG(LogTemp, Warning, TEXT("QuestionOrder is empty. topicId=%d"), topicId);                                                                               
+		return; // 문제 목록이 없으니 바로 되돌아가거나, 강제 재시작                                                                                                 
+	}
+	
 }
 
 void ASignPlayerController::SelectTopic()
@@ -157,6 +174,9 @@ void ASignPlayerController::SelectTopic()
 	{
 		MainUI->GoSelectTopic();
 	}
+
+	// 레벨 시퀀스 종료
+	LevelEndPlayer->GoToEndAndStop();
 }
 
 
@@ -166,8 +186,9 @@ void ASignPlayerController::PlayMotion()
 	// 만약 그 주제의 마지막 문제면 주제 마지막으로 간다. 
 	if (CurIdx >= QuestionOrder.Num())
 	{
-		SetGameState(GamePlayState::TopicComplete);
 		UGameplayStatics::PlaySound2D(GetWorld(), NextLevelSound);
+		PlayLevelEndSeq(); // 시퀀스 재생
+		
 		return;
 	}
 
@@ -207,6 +228,8 @@ void ASignPlayerController::PlayMotion()
 // 오답이면 그 문제 다시 띄우기
 void ASignPlayerController::JudgeNextStep(bool IsCorrect)
 {
+	UE_LOG(LogTemp, Warning, TEXT("JudgeNextStep called. IsCorrect=%d, CurIdx=%d"), IsCorrect, CurIdx);
+	
 	SetGameState(GamePlayState::WaitingJudge); 
 	// 서버 판정 결과를 가지고 이 함수를 호출해주면.
 	label = TEXT("-1"); // 다시 초기화 해주기 (이미지 보내지 않게 하려고)
@@ -225,8 +248,10 @@ void ASignPlayerController::JudgeNextStep(bool IsCorrect)
 		 
 		CurIdx++;
 	}
-
-	if (FalseSound){UGameplayStatics::PlaySound2D(GetWorld(), FalseSound); }
+	else
+	{
+		if (FalseSound){UGameplayStatics::PlaySound2D(GetWorld(), FalseSound); }
+	}
 	SetGameState(GamePlayState::Playing); 
 }
 
@@ -236,6 +261,8 @@ void ASignPlayerController::JudgeNextStep(bool IsCorrect)
 //////////////////////////////위젯//////////////////////////////////
 void ASignPlayerController::ShowWidgetForState(GamePlayState State)
 {
+	
+	
 	if (CurrentState!=GamePlayState::MainMenu && PreviousState == CurrentState)
 	{
 		return;
@@ -278,4 +305,88 @@ void ASignPlayerController::ShowWidgetForState(GamePlayState State)
 			
 		}
 	}
+}
+
+void ASignPlayerController::PlayTopicSelectSeq()
+{
+	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+	SetGameState(GamePlayState::ResultMenu);
+
+	if (UEndGameUI* endgameUI = Cast<UEndGameUI>(CurrentWidget))
+	{
+		endgameUI->SetUIText(FText::FromString(TEXT("Start!")));
+	}
+	
+	static const TCHAR* Path = TEXT("/Game/Game/Sequence/TopicSelectSequence.TopicSelectSequence");
+	if (ULevelSequence* Asset = LoadObject<ULevelSequence>(nullptr, Path))
+	{
+		FMovieSceneSequencePlaybackSettings Settings;
+		ALevelSequenceActor* SeqActor = nullptr;
+		ULevelSequencePlayer* SeqPlayer =
+			ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), Asset, Settings, SeqActor);
+		if (!SeqPlayer) return;
+
+		// 시퀀스 끝나면 호출
+		SeqPlayer->OnFinished.AddDynamic(this, &ASignPlayerController::OnPlayTopicSelectSeqFinished);
+		SeqPlayer->Play();
+		
+	}
+}
+
+void ASignPlayerController::OnPlayTopicSelectSeqFinished()
+{
+	SetGameState(GamePlayState::Playing); 
+}
+
+
+
+void ASignPlayerController::PlayLevelEndSeq()
+{
+
+	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+	SetGameState(GamePlayState::ResultMenu);
+
+	if (UEndGameUI* endgameUI = Cast<UEndGameUI>(CurrentWidget))
+	{
+		endgameUI->SetUIText(FText::FromString(TEXT("Chapter Complete!")));
+	}
+	
+	static const TCHAR* Path = TEXT("/Game/Game/Sequence/LevelEndSequence.LevelEndSequence");
+	if (ULevelSequence* Asset = LoadObject<ULevelSequence>(nullptr, Path))
+	{
+		FMovieSceneSequencePlaybackSettings Settings;
+		ALevelSequenceActor* SeqActor = nullptr;
+		LevelEndPlayer =
+			ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), Asset, Settings, SeqActor);
+		if (!LevelEndPlayer) return;
+
+		// 이건 시퀀스 끝나면 호출
+		LevelEndPlayer->OnFinished.AddDynamic(this, &ASignPlayerController::OnLevelEndSequenceFinished);
+		LevelEndPlayer->Play();
+
+		// 2초 뒤에 OnLevelEndSequenceFinished 직접 호출
+		FTimerHandle TimerHandle;
+		GetWorldTimerManager().SetTimer(
+			TimerHandle,
+			this,
+			&ASignPlayerController::OnLevelEndSequenceDelayed,
+			2.f,
+			false
+		);
+	}
+}
+
+
+void ASignPlayerController::OnLevelEndSequenceDelayed()
+{
+	SetGameState(GamePlayState::TopicComplete);
+}
+
+void ASignPlayerController::OnLevelEndSequenceFinished()
+{
+	if (UTopicCompleteUI* completeUI = Cast<UTopicCompleteUI>(CurrentWidget))
+	{
+		completeUI->ShowbackgroundImg();
+	}
+	
 }
