@@ -424,7 +424,7 @@ void ASignPlayerController::PlayLevelEndSeq()
 
 	if (UEndGameUI* endgameUI = Cast<UEndGameUI>(CurrentWidget))
 	{
-		endgameUI->SetUIText(FText::FromString(TEXT("Chapter Complete!")));
+		endgameUI->SetUIText(FText::FromString(TEXT("주제 학습 완료!")));
 	}
 	
 	static const TCHAR* Path = TEXT("/Game/Game/Sequence/LevelEndSequence.LevelEndSequence");

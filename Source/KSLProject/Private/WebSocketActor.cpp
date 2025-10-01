@@ -270,6 +270,19 @@ void AWebSocketActor::OnMessageReceived(const FString& Message)
 				}
 			}
 		}
+		else
+		{
+			OnSuccessResponse.Broadcast(LastServerResponse);
+
+			if (UWorld* World = GetWorld())
+			{
+				ASignPlayerController* SignPlayerController = Cast<ASignPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
+				if (SignPlayerController)
+				{
+					SignPlayerController->JudgeNextStep(false);
+				}
+			}
+		}
 	}
 	else
 	{
@@ -350,7 +363,7 @@ void AWebSocketActor::StartSendingFrames()
 	{
 		UE_LOG(LogTemp, Log, TEXT("Starting frame data sending timer..."));
 		//GetWorld()->GetTimerManager().SetTimer(FrameSendTimerHandle, this, &AWebSocketActor::SendFrameData, 1.f / 6.f, true);
-		GetWorld()->GetTimerManager().SetTimer(FrameSendTimerHandle, this, &AWebSocketActor::SendFrameData, 1.f, true);
+		GetWorld()->GetTimerManager().SetTimer(FrameSendTimerHandle, this, &AWebSocketActor::SendFrameData, 5.f, true);
 	}
 }
 
